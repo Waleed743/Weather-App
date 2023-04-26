@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script>
+function populate(countries,cities){
+	var countries = document.getElementById(countries);
+	var cities = document.getElementById(cities);
+	if(countries.value == "pakistan"){
+		var optionArray = ["|","karachi|Karachi","lahore|Lahore","islamabad|Islamabad"];
+	} 
+    else if(countries.value == "India"){
+		var optionArray = ["|","Delhi|Delhi","Kolkata|Kolkata","Mumbai|Mumbai"];
+    }
+	for(var option in optionArray){
+		var pair = optionArray[option].split("|");
+		var newOption = document.createElement("option");
+		newOption.value = pair[0];
+		newOption.innerHTML = pair[1];
+		cities.options.add(newOption);
+
+	}
+}
+
+function selectCity(props){
+        
+         
+            fetch("https://api.openweathermap.org/data/2.5/weather?q="+props+"&appid=cd0aab3ba61e4af27742fa6aa6fd4cdd").then((response)=>response.json()).then((data)=>{
+                 const cel=data.main.temp-273.15;
+                 
+                 const str="<h1> weather of "+props+" is : "+parseInt(cel)+" &#x2103;</h1>";
+                 debugger;
+                 document.getElementById('res').innerHTML= str;
+            
+            
+            
+            }).catch((error)=>console.log(error));
+                    }
+
+</script>
+</head>
+<body>
+<h2>Choose Your Country and city</h2>
+<hr />
+Choose country :
+<select id="slct1" name="slct1" onchange="populate(this.id,'cities')">
+    <option value="" selected  disabled hidden >Choose here</option>
+
+  <option value=""></option>
+  <option value="pakistan">Pakistan</option>
+<option value="India">India</option>
+</select>
+<hr />
+Choose city :
+<select id="cities" name="cities" onchange="selectCity(cities.value)">
+    <option value="" selected  disabled hidden >Choose here</option>
+
+</select>
+<hr />
+<div id="res" >
+    
+</div>
+</body>
+</html>
